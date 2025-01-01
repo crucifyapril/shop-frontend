@@ -8,4 +8,9 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
+  runtimeConfig: {
+    public: {
+      apiBase: 'http://nginx-shop/api/', // Указывайте правильный URL
+    },
+  },
 })
