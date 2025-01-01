@@ -1,9 +1,9 @@
 <template>
   <div>
     <h1>Products</h1>
-    <h1 v-if="data === null">no data</h1>
+    <h1 v-if="products === null">no data</h1>
     <ul>
-      <li v-for="product in data" :key="product.id">
+      <li v-for="product in products" :key="product.id">
         <h2>{{ product.name }}</h2>
         <p>{{ product.description }}</p>
         <p>Price: {{ product.price }}</p>
@@ -20,7 +20,5 @@ interface Product {
   price: number
 }
 
-const { data } = await useFetch<Product[]>('http://localhost/api/products')
-
-
+const {data: products} = await useFetch<Product[]>('http://nginx-shop/api/products/random')
 </script>
