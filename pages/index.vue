@@ -2,6 +2,7 @@
 import HeaderComponent from '~/components/Header.vue'
 import FooterComponent from '~/components/Footer.vue'
 import products from "~/components/products.vue";
+
 </script>
 
 <template>
@@ -12,7 +13,7 @@ import products from "~/components/products.vue";
   <main class="flex-grow container mx-auto py-8">
     <h1 class="text-3xl font-bold flex items-center justify-center mb-16 mt-10">Привет мир</h1>
 
-    <products />
+    <products apiUrl="/api/products/random" />
   </main>
 
 
