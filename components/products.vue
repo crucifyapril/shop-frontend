@@ -34,29 +34,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue';
-import { useFetch } from '#app';
-
 interface Product {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
+  id: number
+  name: string
+  description: string
+  price: number
 }
 
-// Объявляем пропсы
-const props = defineProps({
-  apiUrl: {
-    type: String,
-    required: true,
-  },
-});
-
-const products = ref<Product[]>([]);
-
-// Загружаем данные при изменении apiUrl
-watchEffect(async () => {
-  const { data } = await useFetch<Product[]>(props.apiUrl); // Используем props.apiUrl
-  products.value = data.value || [];
-});
+const {data: products} = await useFetch<Product[]>('http://nginx-shop/api/products/random')
 </script>

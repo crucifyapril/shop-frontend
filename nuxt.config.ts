@@ -10,7 +10,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      apiBase: 'http://nginx-shop/api/', // Указывайте правильный URL
+      apiBase: 'http://nginx-shop/api',
     },
   },
 })

@@ -17,7 +17,7 @@ install:
 build:
 	@docker run -it --rm -v $$(pwd):/app -w /app --user 1000:1000 node:${NODE_VERSION} npm run build
 dev:
-	@docker run -it --rm -v $$(pwd):/app -w /app --user 1000:1000 --network web-network-shop -p 3000:3000 node:${NODE_VERSION} npm run dev
+	@docker run -it --rm -v $$(pwd):/app -w /app --user 1000:1000 --name=shop-dev-frontend --network web-network-shop -p 3000:3000 node:${NODE_VERSION} npm run dev
 
 # Пример: make run cmd='npm install -D tailwindcss'
 run:
