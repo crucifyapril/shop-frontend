@@ -19,6 +19,5 @@ build:
 dev:
 	@npm run dev
 
-# Пример: make run cmd='npm install -D tailwindcss'
 run:
 	@docker run -it --rm -v $$(pwd):/app -w /app --user 1000:1000 node:${NODE_VERSION} $(cmd)
