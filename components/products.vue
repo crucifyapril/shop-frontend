@@ -1,39 +1,10 @@
-<template>
-  <div class="flex flex-wrap justify-center">
-    <div v-for="product in products" :key="product.id">
-      <div
-          class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 m-2">
-        <a href="#">
-          <img class="p-8 rounded-t-lg" src="public/images/no-image.jpg" alt="product image" />
-        </a>
-        <div class="px-5 pb-5">
-          <a href="#">
-            <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{{ product.name }}</h5>
-          </a>
-          <div class="flex items-center justify-between">
-            <span class="text-3xl font-bold text-gray-900 dark:text-white">{{ product.price }} руб.</span>
-            <form action="#">
-              <button type="submit"
-                      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center
-                dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Под заказ
-              </button>
-            </form>
-            <form action="#" method="POST">
-              <input type="hidden" name="product_id" :value="product.id">
-              <input type="hidden" name="quantity" value="1">
-              <button type="submit"
-                      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center
-                dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">В корзину
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
+import { useRuntimeConfig } from '#app';
+import itemComponent from "~/components/item.vue";
+
+const config = useRuntimeConfig();
+const baseURL = config.public.apiBase;
+
 interface Product {
   id: number
   name: string
@@ -41,5 +12,13 @@ interface Product {
   price: number
 }
 
-const {data: products} = await useFetch<Product[]>('http://nginx-shop/api/products/random')
+const {data: products} = await useFetch<Product[]>(`${baseURL}/api/products/random`)
 </script>
+
+<template>
+  <div class="flex flex-wrap justify-center">
+    <div v-for="product in products" :key="product.id">
+      <itemComponent :product="product"/>
+    </div>
+  </div>
+</template>
