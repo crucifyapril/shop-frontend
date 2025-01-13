@@ -1,9 +1,12 @@
 <script setup lang="ts">
 defineProps<{
   product: {
-    id: number;
-    name: string;
-    price: number;
+    id: number
+    name: string
+    description: string
+    price: number
+    quantity: number
+    is_available: boolean
   }
 }>();
 </script>

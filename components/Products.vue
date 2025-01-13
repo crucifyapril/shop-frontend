@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRuntimeConfig } from '#app';
-import itemComponent from "~/components/item.vue";
+import itemComponent from "~/components/Item.vue";
 
 const config = useRuntimeConfig();
 const baseURL = config.public.apiBase;
