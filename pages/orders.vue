@@ -42,6 +42,10 @@ const goToPage = async (newPage: number) => {
   }
 };
 
+function formatDate(dateString: string) {
+  const parsedDate = new Date(dateString);
+  return `${parsedDate.getFullYear()}-${(parsedDate.getMonth() + 1).toString().padStart(2, '0')}-${parsedDate.getDate().toString().padStart(2, '0')} ${parsedDate.getHours().toString().padStart(2, '0')}:${parsedDate.getMinutes().toString().padStart(2, '0')}:${parsedDate.getSeconds().toString().padStart(2, '0')}`;
+}
 </script>
 
 <template>
@@ -81,9 +85,8 @@ const goToPage = async (newPage: number) => {
             </th>
           </tr>
           </thead>
-          <tbody>
-          <tr
-              v-for="order in orders" :key="order.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+          <tbody v-for="order in orders" :key="order.id">
+          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
               {{ order.id }}
             </th>
@@ -97,14 +100,15 @@ const goToPage = async (newPage: number) => {
               {{ order.total_amount }} руб
             </td>
             <td class="px-6 py-4 text-center">
-              {{ order.created_at }}
+              {{ formatDate(order.created_at) }}
             </td>
             <td class="px-6 py-4 text-center">
-              <a href="#">
-                <button class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
-                  Перейти
-                </button>
-              </a>
+              <NuxtLink
+                  :to="{ name: 'orders-id', params: { id: order.id } }"
+                  class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+              >
+                Перейти
+              </NuxtLink>
             </td>
           </tr>
           </tbody>
