@@ -52,7 +52,7 @@ const goToPage = async (newPage: number) => {
 
       <div v-else>
         <div class="flex flex-wrap justify-center">
-          <div v-for="product in products" :key="product.id" class="p-4">
+          <div v-for="product in products" :key="product.id">
             <itemComponent :product="product" />
           </div>
         </div>
