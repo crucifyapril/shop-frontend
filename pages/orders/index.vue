@@ -104,7 +104,7 @@ function formatDate(dateString: string) {
             </td>
             <td class="px-6 py-4 text-center">
               <NuxtLink
-                  :to="{ name: 'orders-id', params: { id: order.id } }"
+                  :to="`/orders/${order.id}`"
                   class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
               >
                 Перейти
