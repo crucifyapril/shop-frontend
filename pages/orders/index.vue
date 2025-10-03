@@ -21,7 +21,9 @@ const isLoading = ref(false);
 const fetchOrders = async () => {
   try {
     isLoading.value = true;
-    const { data } = await useFetch<ApiResponse>(`${baseURL}/api/orders?page=${page.value}`);
+    const { data } = await useFetch<ApiResponse>(`${baseURL}/api/orders?page=${page.value}`, {
+      credentials: 'include',
+    });
     if (data.value) {
       orders.value = data.value.data;
       totalPages.value = data.value.last_page;

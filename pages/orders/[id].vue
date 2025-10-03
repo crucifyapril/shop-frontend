@@ -1,0 +1,136 @@
+<script setup lang="ts">
+import HeaderComponent from '~/components/Header.vue'
+import FooterComponent from '~/components/Footer.vue'
+import { useRuntimeConfig } from "#app";
+import {useAuthStore} from '~/stores/auth';
+import {computed} from 'vue';
+
+const authStore = useAuthStore();
+
+const userName = computed(() => authStore.user?.name || 'Гость');
+const userEmail = computed(() => authStore.user?.email || '');
+
+const config = useRuntimeConfig();
+const baseURL = config.public.apiBase;
+
+const route = useRoute();
+const orderId = route.params.id;
+
+interface OrderProduct {
+  id: number;
+  name: string;
+  price: number;
+  pivot: {
+    quantity: number;
+  };
+}
+
+interface OrderDetails {
+  id: number;
+  description: string | null;
+  products: OrderProduct[];
+  status: string;
+  total_amount: number;
+}
+
+const { data: orderDetails } = await useFetch<OrderDetails>(`${baseURL}/api/orders/${orderId}`, {
+  credentials: 'include',
+});
+</script>
+
+<template>
+  <div class="flex flex-col min-h-screen bg-gray-900 text-gray-100 w-full">
+
+    <HeaderComponent />
+
+    <main class="flex-grow container mx-auto py-8">
+      <h1 class="flex items-center justify-center text-3xl font-bold mt-10 mb-16">Заказ #{{ orderId }}</h1>
+
+      <div v-if="!orderDetails" class="flex justify-center items-center">
+        <span>Загрузка...</span>
+      </div>
+
+      <section v-else class="py-24 relative">
+        <div class="w-full max-w-7xl px-4 md:px-5 lg-6 mx-auto">
+          <div
+              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-8 py-6 border-y border-gray-100 mb-6">
+            <div class="box group">
+              <p class="font-normal text-base leading-7 text-gray-500 mb-3 transition-all duration-500 group-hover:text-gray-700">
+                Статус</p>
+              <h6 class="font-semibold font-manrope text-2xl leading-9 text-white">{{ orderDetails.status }}</h6>
+            </div>
+            <div class="box group">
+              <p class="font-normal text-base leading-7 text-gray-500 mb-3 transition-all duration-500 group-hover:text-gray-700">
+                Заказчик</p>
+              <h6 class="font-semibold font-manrope text-2xl leading-9 text-white">{{ userName }}</h6>
+            </div>
+            <div class="box group">
+              <p class="font-normal text-base leading-7 text-gray-500 mb-3 transition-all duration-500 group-hover:text-gray-700">
+                Почта</p>
+              <h6 class="font-semibold font-manrope text-2xl leading-9 text-white">{{ userEmail }}</h6>
+            </div>
+            <div class="box group">
+              <p class="font-normal text-base leading-7 text-gray-500 mb-3 transition-all duration-500 group-hover:text-gray-700">
+                Комментарий к заказу</p>
+              <h6 class="font-semibold font-manrope text-2xl leading-9 text-white">{{ orderDetails.description || 'Нет комментария' }}</h6>
+            </div>
+          </div>
+          <div class="relative overflow-x-auto m-auto w-2/3">
+            <table class="w-full text-sm rtl:text-right text-gray-500 dark:text-gray-400">
+              <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <tr>
+                <th scope="col" class="px-6 py-3">
+                  #
+                </th>
+                <th scope="col" class="px-6 py-3">
+                  Наименование
+                </th>
+                <th scope="col" class="px-6 py-3">
+                  Количество
+                </th>
+                <th scope="col" class="px-6 py-3">
+                  Цена
+                </th>
+                <th scope="col" class="px-6 py-3">
+                  Сумма
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr v-for="product in orderDetails.products" :key="product.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <th scope="row"
+                    class="px-6 hover:underline py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <NuxtLink :to="`/catalog/${product.id}`">{{ product.id }}</NuxtLink>
+                </th>
+                <td class="px-6 py-4 text-center hover:underline">
+                  <NuxtLink :to="`/catalog/${product.id}`">{{ product.name }}</NuxtLink>
+                </td>
+                <td class="px-6 py-4 text-center">
+                  {{ product.pivot.quantity }}
+                </td>
+                <td class="px-6 py-4 text-center">
+                  {{ product.price }} руб
+                </td>
+                <td class="px-6 py-4 text-center ">
+                  {{ product.price * product.pivot.quantity }} руб
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="flex items-center justify-center sm:justify-end w-full my-6">
+            <div class=" w-full">
+              <div class="flex items-center justify-between py-6 border-y border-gray-100">
+                <p class="font-manrope font-semibold text-2xl leading-9 text-white">Общая сумма</p>
+                <p class="font-manrope font-bold text-2xl leading-9 text-white">{{ orderDetails.total_amount }} руб</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+
+    <FooterComponent />
+  </div>
+</template>
