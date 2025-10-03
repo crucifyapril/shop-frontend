@@ -5,7 +5,7 @@ import {computed} from 'vue';
 const authStore = useAuthStore();
 
 const isAuthenticated = computed(() => authStore.isAuth());
-const userName = computed(() => authStore.user?.name || 'Гость');
+const userName = computed(() => authStore.user?.name);
 
 const logout = async () => {
   await authStore.logout();
@@ -24,7 +24,6 @@ const logout = async () => {
         <div class="flex items-center lg:order-2">
           <!-- Корзина -->
           <a
-              v-if="isAuthenticated"
               href="/cart"
               class="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium
               rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
@@ -53,7 +52,7 @@ const logout = async () => {
           </button>
 
           <!-- Пользователь -->
-          <div>{{ userName}}</div>
+          <div v-if="isAuthenticated">{{ userName }}</div>
         </div>
 
         <!-- Навигация -->
