@@ -13,6 +13,10 @@ defineProps<{
 }>();
 
 const addToCart = inject("addToCart");
+
+const preOrder = (productId: number) => {
+  navigateTo(`/pre-order/${productId}`);
+};
 </script>
 
 <template>
@@ -30,12 +34,10 @@ const addToCart = inject("addToCart");
       <div class="flex items-center justify-between">
         <span class="text-3xl font-bold text-gray-900 dark:text-white">{{ product.price }} руб.</span>
         <div v-if="product.quantity === 0">
-          <form action="#">
-            <button type="submit"
-                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center
+          <button @click.prevent="preOrder(product.id)"
+                  class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center
                   dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Под заказ
-            </button>
-          </form>
+          </button>
         </div>
         <div v-else>
           <button @click.prevent="addToCart(product.id)"

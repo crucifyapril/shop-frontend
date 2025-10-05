@@ -4,9 +4,12 @@ import HeaderComponent from "~/components/Header.vue";
 import FooterComponent from "~/components/Footer.vue";
 import { useRuntimeConfig } from "#app";
 import type { ApiResponse, Product } from "~/types/ProductTypes";
+import { parse } from 'cookie';
+import { useAuthStore } from '~/stores/auth';
 
 const config = useRuntimeConfig();
 const baseURL = config.public.apiBase;
+const authStore = useAuthStore();
 
 const page = ref(1);
 const products = ref<Product[]>([]);
@@ -36,6 +39,30 @@ const goToPage = async (newPage: number) => {
     await fetchProducts();
   }
 };
+
+const addToCart = async (productId: number) => {
+  try {
+    await authStore.fetchCsrfToken();
+    const cookies = parse(document.cookie);
+    const csrfToken = cookies['XSRF-TOKEN'] ?? '';
+
+    await $fetch(`${baseURL}/api/cart`, {
+      method: "POST",
+      headers: {'X-XSRF-TOKEN': csrfToken},
+      credentials: 'include',
+      body: {
+        product_id: productId,
+        quantity: 1
+      },
+    });
+
+    await navigateTo('/cart');
+  } catch (error) {
+    console.error("Ошибка добавления в корзину:", error);
+  }
+};
+
+provide("addToCart", addToCart);
 </script>
 
 <template>
