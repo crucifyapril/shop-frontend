@@ -1,39 +1,51 @@
 <script setup lang="ts">
+import { inject } from "vue";
+
 defineProps<{
   product: {
-    id: number;
-    name: string;
-    price: number;
+    id: number
+    name: string
+    description: string
+    price: number
+    quantity: number
+    is_available: boolean
   }
 }>();
+
+const addToCart = inject("addToCart");
+
+const preOrder = (productId: number) => {
+  navigateTo(`/pre-order/${productId}`);
+};
 </script>
 
 <template>
   <div
       class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 m-2">
-    <a href="#">
+    <NuxtLink
+        :to="`/catalog/${product.id}`">
       <img class="p-8 rounded-t-lg" src="public/images/no-image.jpg" alt="product image"/>
-    </a>
+    </NuxtLink>
     <div class="px-5 pb-5">
-      <a href="#">
+      <NuxtLink
+          :to="`/catalog/${product.id}`">
         <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{{ product.name }}</h5>
-      </a>
+      </NuxtLink>
       <div class="flex items-center justify-between">
         <span class="text-3xl font-bold text-gray-900 dark:text-white">{{ product.price }} руб.</span>
-        <form action="#">
-          <button type="submit"
+        <div v-if="product.quantity === 0">
+          <button @click.prevent="preOrder(product.id)"
                   class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center
                   dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Под заказ
           </button>
-        </form>
-        <form action="#" method="POST">
-          <input type="hidden" name="product_id" :value="product.id">
-          <input type="hidden" name="quantity" value="1">
-          <button type="submit"
+        </div>
+        <div v-else>
+          <button @click.prevent="addToCart(product.id)"
                   class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center
-                  dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">В корзину
+        dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            В корзину
           </button>
-        </form>
+        </div>
       </div>
     </div>
   </div>
